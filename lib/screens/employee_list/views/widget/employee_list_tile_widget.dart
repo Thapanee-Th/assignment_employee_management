@@ -155,44 +155,6 @@ class EmployeeListTile extends StatelessWidget {
     );
   }
 
-  Widget _buildActions(BuildContext context) {
-    return PopupMenuButton<String>(
-      onSelected: (value) {
-        switch (value) {
-          case 'edit':
-            onEdit?.call(employee);
-            break;
-          case 'delete':
-            _showDeleteConfirmation(context);
-            break;
-        }
-      },
-      itemBuilder:
-          (context) => [
-            const PopupMenuItem(
-              value: 'edit',
-              child: Row(
-                children: [
-                  Icon(Icons.edit, size: 18),
-                  SizedBox(width: 8),
-                  Text('Edit'),
-                ],
-              ),
-            ),
-            const PopupMenuItem(
-              value: 'delete',
-              child: Row(
-                children: [
-                  Icon(Icons.delete, size: 18, color: Colors.red),
-                  SizedBox(width: 8),
-                  Text('Delete', style: TextStyle(color: Colors.red)),
-                ],
-              ),
-            ),
-          ],
-    );
-  }
-
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
       context: context,

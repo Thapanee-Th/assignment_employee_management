@@ -30,7 +30,7 @@ class JsonAssetsService {
 
   /// Load and parse JSON data into a specific model type
   /// [assetPath] - Path to the JSON file in assets folder
-  /// [fromJson] - Function to convert Map<String, dynamic> to your model
+  /// [fromJson]
   Future<T> loadJsonModel<T>(
     String assetPath,
     T Function(Map<String, dynamic>) fromJson,
@@ -44,8 +44,8 @@ class JsonAssetsService {
   }
 
   /// Load and parse JSON array into a list of specific model type
-  /// [assetPath] - Path to the JSON file in assets folder
-  /// [fromJson] - Function to convert Map<String, dynamic> to your model
+  /// [assetPath]
+  /// [fromJson]
   Future<List<T>> loadJsonModelList<T>(
     String assetPath,
     T Function(Map<String, dynamic>) fromJson,
