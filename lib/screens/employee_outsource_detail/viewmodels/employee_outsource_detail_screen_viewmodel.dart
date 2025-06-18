@@ -65,12 +65,11 @@ class EmployeeOutsourceDetailScreenViewModel extends GetxController {
     }
   }
 
-  void deleteEmployee(BuildContext context) {
+  void deleteEmployee() {
     Get.dialog(
       Builder(
         // Provides a BuildContext within the dialog
         builder: (dialogContext) {
-          final theme = Theme.of(dialogContext);
           return AlertDialog(
             title: const Text('Delete Employee'),
             content: Text(
@@ -78,7 +77,7 @@ class EmployeeOutsourceDetailScreenViewModel extends GetxController {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Get.back(),
                 child: const Text('Cancel'),
               ),
               TextButton(

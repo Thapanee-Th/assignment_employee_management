@@ -89,48 +89,13 @@ class EmployeeListTile extends StatelessWidget {
         leading: Icon(Icons.person),
         title: _buildTitle(),
         subtitle: _buildSubtitle(),
-        trailing: _buildActions(context),
-        onTap: onTap != null ? () => onTap!(employee) : null,
-      ),
-    );
-  }
-
-  // Widget _buildAvatar() {
-  //   return Container(
-  //     width: 50,
-  //     height: 50,
-  //     decoration: BoxDecoration(
-  //       color: _getAvatarColor(),
-  //       borderRadius: BorderRadius.circular(25),
-  //       // border: Border.all(
-  //       //   color: employee.isActive ? Colors.green : Colors.grey,
-  //       //   width: 2,
-  //       // ),
-  //     ),
-  //     child:
-  //         employee.profileImage.isNotEmpty
-  //             ? ClipRRect(
-  //               borderRadius: BorderRadius.circular(23),
-  //               child: Image.network(
-  //                 employee.profileImage,
-  //                 fit: BoxFit.cover,
-  //                 errorBuilder:
-  //                     (context, error, stackTrace) => _buildInitialsAvatar(),
-  //               ),
-  //             )
-  //             : _buildInitialsAvatar(),
-  //   );
-  // }
-
-  Widget _buildInitialsAvatar() {
-    return Center(
-      child: Text(
-        employee.name,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
+        trailing: IconButton(
+          onPressed: () {
+            _showDeleteConfirmation(context);
+          },
+          icon: Icon(Icons.delete, size: 30, color: Colors.red.shade500),
         ),
+        onTap: onTap != null ? () => onTap!(employee) : null,
       ),
     );
   }
@@ -145,7 +110,7 @@ class EmployeeListTile extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(
-          employee.company ?? '',
+          employee.company,
           style: TextStyle(
             color: Colors.blue.shade700,
             fontWeight: FontWeight.w500,

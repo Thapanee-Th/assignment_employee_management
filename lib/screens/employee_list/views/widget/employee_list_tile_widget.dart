@@ -89,7 +89,12 @@ class EmployeeListTile extends StatelessWidget {
         leading: Icon(Icons.person),
         title: _buildTitle(),
         subtitle: _buildSubtitle(),
-        trailing: _buildActions(context),
+        trailing: IconButton(
+          onPressed: () {
+            _showDeleteConfirmation(context);
+          },
+          icon: Icon(Icons.delete, size: 30, color: Colors.red.shade500),
+        ),
         onTap: onTap != null ? () => onTap!(employee) : null,
       ),
     );

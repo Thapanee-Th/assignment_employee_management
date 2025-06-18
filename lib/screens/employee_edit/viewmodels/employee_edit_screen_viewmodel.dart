@@ -48,15 +48,6 @@ class EmployeeEditScreenViewModel extends GetxController {
         phone: phoneController.text,
       );
       if (await _employeeService.updateEmployee(emp)) {
-        // Get.snackbar(
-        //   'Success',
-        //   'Employee ${employee.value!.name} updated!',
-        //   snackPosition: SnackPosition.BOTTOM,
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
-        // await Future.delayed(const Duration(seconds: 2));
-        // Get.back();
         Get.back(result: {'success': true, 'employeeName': emp.name});
       } else {
         Get.snackbar(

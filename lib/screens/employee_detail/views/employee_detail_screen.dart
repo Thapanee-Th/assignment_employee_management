@@ -20,26 +20,18 @@ class EmployeeDetailScreen extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () => viewModel.editEmployee(),
-          ),
-          PopupMenuButton<String>(
-            onSelected: (value) => _handleMenuAction(context, value),
-            itemBuilder:
-                (context) => [
-                  const PopupMenuItem(
-                    value: 'delete',
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete, size: 18, color: Colors.red),
-                        SizedBox(width: 8),
-                        Text('Delete', style: TextStyle(color: Colors.red)),
-                      ],
-                    ),
-                  ),
-                ],
+            onPressed: () {
+              viewModel.deleteEmployee();
+            },
+            icon: Icon(Icons.delete, size: 30, color: Colors.red.shade500),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.edit),
+        onPressed: () {
+          viewModel.editEmployee();
+        },
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -335,55 +327,6 @@ class EmployeeDetailScreen extends StatelessWidget {
       Colors.indigo.shade600,
     ];
     return colors[viewModel.employee.value.id.hashCode % colors.length];
-  }
-
-  void _handleMenuAction(BuildContext context, String action) {
-    switch (action) {
-      case 'share':
-        _shareEmployee(context);
-        break;
-      case 'delete':
-        viewModel.deleteEmployee();
-        break;
-    }
-  }
-
-  void _shareEmployee(BuildContext context) {
-    final shareText = '''
-Employee Details:
-Name: ${viewModel.employee.value.name}
-Position: ${viewModel.employee.value.position}
-Email: ${viewModel.employee.value.email}
-Phone: ${viewModel.employee.value.phone}
-''';
-
-    // Show share dialog
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Share Employee'),
-            content: Text(shareText),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: shareText));
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Employee details copied to clipboard'),
-                    ),
-                  );
-                },
-                child: const Text('Copy'),
-              ),
-            ],
-          ),
-    );
   }
 
   void _launchEmail(String email) {
