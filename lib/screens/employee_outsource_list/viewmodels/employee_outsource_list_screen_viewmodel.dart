@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import '../../../models/employee.dart';
 
 class EmployeeOutsourceListsScreenViewModel extends GetxController {
-  final EmployeeOutsouceService _employeeService = EmployeeOutsouceService();
+  final EmployeeOutsourceService _employeeService = EmployeeOutsourceService();
 
   // Observable variables
   final RxList<EmployeeOutsource> employees = <EmployeeOutsource>[].obs;
@@ -151,9 +151,9 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
     loadEmployees();
   }
 
-  getDetail(employee) async {
+  getDetail(EmployeeOutsource employee) async {
     final result = await Get.toNamed(
-      Routes.employeeDetail,
+      Routes.employeeOutsourceDetail,
       arguments: employee,
     );
 

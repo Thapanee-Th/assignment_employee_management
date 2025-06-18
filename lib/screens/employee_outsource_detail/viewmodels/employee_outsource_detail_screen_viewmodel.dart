@@ -1,12 +1,16 @@
-import 'package:employee_management/services/employee_service.dart';
+import 'package:employee_management/models/employee_outsource.dart';
+import 'package:employee_management/routes/app_pages.dart';
+import 'package:employee_management/services/employee_outsource_service.dart';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/employee.dart';
 
 class EmployeeOutsourceDetailScreenViewModel extends GetxController {
-  final EmployeeService _employeeService = EmployeeService();
+  final EmployeeOutsourceService _employeeService = EmployeeOutsourceService();
 
   // Observable variables
-  final RxList<Employee> employees = <Employee>[].obs;
+  final Rxn<EmployeeOutsource> employee = Rxn<EmployeeOutsource>();
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxString searchQuery = ''.obs;
@@ -15,125 +19,106 @@ class EmployeeOutsourceDetailScreenViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadEmployees();
-  }
-
-  // Load all employees
-  Future<void> loadEmployees() async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final List<Employee> employeeList =
-          await _employeeService.getAllEmployees();
-      employees.assignAll(employeeList);
-    } catch (e) {
-      errorMessage.value = 'Failed to load employees: $e';
-    } finally {
-      isLoading.value = false;
+    if (Get.arguments != null && Get.arguments is Employee) {
+      employee.value = Get.arguments as EmployeeOutsource;
+    } else if (Get.arguments != null &&
+        Get.arguments is Map &&
+        Get.arguments['employee'] is Map<String, dynamic>) {
+      employee.value = EmployeeOutsource.fromJson(
+        Get.arguments['employee'] as Map<String, dynamic>,
+      );
     }
   }
 
-  // Add new employee
-  Future<bool> addEmployee(Employee employee) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final bool success = await _employeeService.addEmployee(employee);
-      if (success) {
-        employees.add(employee);
-        Get.snackbar(
-          'Success',
-          'Employee added successfully',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        return true;
-      } else {
-        errorMessage.value = 'Failed to add employee';
-        return false;
-      }
-    } catch (e) {
-      errorMessage.value = 'Error adding employee: $e';
-      return false;
-    } finally {
-      isLoading.value = false;
+  void editEmployee() async {
+    final result = await Get.toNamed(
+      Routes.employeeEdit,
+      arguments: employee.value,
+    );
+    if (result != null && result is Map && result['success'] == true) {
+      var emp =
+          await _employeeService.getEmployeeById(employee.value!.id) ??
+          employee.value;
+      debugPrint('Fetched employee for update: ${emp!.toJson()}');
+      employee.value!.name = emp.name;
+      employee.value!.email = emp.email;
+      employee.value!.position = emp.position;
+      employee.value!.phone = emp.phone;
+      employee.refresh();
+      debugPrint(
+        'Fetched employee.value for update: ${employee.value!.toJson()}',
+      );
+      Get.snackbar(
+        'Success',
+        'Employee ${result['employeeName']} updated!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     }
   }
 
-  // Update employee
-  Future<bool> updateEmployee(Employee employee) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
+  void deleteEmployee(BuildContext context) {
+    Get.dialog(
+      Builder(
+        // Provides a BuildContext within the dialog
+        builder: (dialogContext) {
+          final theme = Theme.of(dialogContext);
+          return AlertDialog(
+            title: const Text('Delete Employee'),
+            content: Text(
+              'Are you sure you want to delete ${employee.value!.name}?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final result = await _employeeService.deleteEmployee(
+                    employee.value!.id,
+                  );
+                  debugPrint('Delete result: $result');
 
-      final bool success = await _employeeService.updateEmployee(employee);
-      if (success) {
-        final int index = employees.indexWhere((emp) => emp.id == employee.id);
-        if (index != -1) {
-          employees[index] = employee;
-        }
-        Get.snackbar(
-          'Success',
-          'Employee updated successfully',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        return true;
-      } else {
-        errorMessage.value = 'Failed to update employee';
-        return false;
-      }
-    } catch (e) {
-      errorMessage.value = 'Error updating employee: $e';
-      return false;
-    } finally {
-      isLoading.value = false;
-    }
+                  Get.back(); // Close dialog
+                  Get.back(
+                    result: {'success': true},
+                  ); // Go back to previous screen
+                  // Handle delete logic here
+                },
+                style: TextButton.styleFrom(foregroundColor: Colors.red),
+                child: const Text('Delete'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+    // showDialog(
+    //   context: context,
+    //   builder:
+    //       (context) => AlertDialog(
+    //         title: const Text('Delete Employee'),
+    //         content: Text(
+    //           'Are you sure you want to delete ${employee.value!.name}?',
+    //         ),
+    //         actions: [
+    //           TextButton(
+    //             onPressed: () => Navigator.pop(context),
+    //             child: const Text('Cancel'),
+    //           ),
+    //           TextButton(
+    //             onPressed: () {
+    //               Navigator.pop(context); // Close dialog
+    //               Navigator.pop(context); // Go back to previous screen
+    //               // Handle delete logic here
+    //             },
+    //             style: TextButton.styleFrom(foregroundColor: Colors.red),
+    //             child: const Text('Delete'),
+    //           ),
+    //         ],
+    //       ),
+    // );
   }
-
-  // Delete employee
-  Future<bool> deleteEmployee(String employeeId) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final bool success = await _employeeService.deleteEmployee(employeeId);
-      if (success) {
-        employees.removeWhere((emp) => emp.id == employeeId);
-        Get.snackbar(
-          'Success',
-          'Employee deleted successfully',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        return true;
-      } else {
-        errorMessage.value = 'Failed to delete employee';
-        return false;
-      }
-    } catch (e) {
-      errorMessage.value = 'Error deleting employee: $e';
-      return false;
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  // Get employee by ID
-  Employee? getEmployeeById(String employeeId) {
-    try {
-      return employees.firstWhere((emp) => emp.id == employeeId);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  // Clear search and filters
-  void clearFilters() {
-    searchQuery.value = '';
-    selectedDepartment.value = '';
-    loadEmployees();
-  }
-
-  // Get filtered employees count
-  int get employeesCount => employees.length;
 }

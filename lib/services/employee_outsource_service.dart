@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/employee.dart';
 
-class EmployeeOutsouceService {
+class EmployeeOutsourceService {
   static const String _apiEmployee =
       'https://fake-json-api.mock.beeceptor.com/users';
   final Dio _dio = Dio();
