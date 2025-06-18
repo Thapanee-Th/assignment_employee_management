@@ -64,6 +64,18 @@ class EmployeeListsScreenViewModel extends GetxController {
     }
   }
 
+  onAddEmployee() async {
+    final result = await Get.toNamed(Routes.employeeAdd);
+    if (result != null && result is Map && result['success'] == true) {
+      loadEmployees();
+      Get.snackbar(
+        'Success',
+        'Employee added successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
   // Update employee
   Future<bool> updateEmployee(Employee employee) async {
     try {

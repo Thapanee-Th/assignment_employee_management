@@ -1,4 +1,3 @@
-import 'package:employee_management/routes/app_pages.dart';
 import 'package:employee_management/screens/employee_list/viewmodels/employee_list_screen_viewmodel.dart';
 import 'package:employee_management/screens/employee_list/views/widget/employee_list_tile_widget.dart';
 import 'package:employee_management/utils/constants.dart';
@@ -21,7 +20,7 @@ class EmployeeListsScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          //Get.toNamed(Routes.addEmployee);
+          viewModel.onAddEmployee();
         },
       ),
       body: Obx(() {

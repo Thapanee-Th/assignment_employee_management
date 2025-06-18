@@ -1,3 +1,5 @@
+import 'package:employee_management/screens/employee_add/employee_add_screen_binding.dart';
+import 'package:employee_management/screens/employee_add/views/employee_add_screen.dart';
 import 'package:employee_management/screens/employee_detail/employee_detail_screen_binding.dart';
 import 'package:employee_management/screens/employee_detail/views/employee_detail_screen.dart';
 import 'package:employee_management/screens/employee_edit/employee_edit_screen_binding.dart';
@@ -21,6 +23,7 @@ class AppPages {
   static const employeeOutsourceLists = Routes.employeeOutsourceLists;
   static const employeeOutsourceDetail = Routes.employeeOutsourceDetail;
   static const employeeEdit = Routes.employeeEdit;
+  static const employeeAdd = Routes.employeeAdd;
 
   static final routes = [
     GetPage(name: home, page: () => HomeScreen(), binding: HomeScreenBinding()),
@@ -33,6 +36,11 @@ class AppPages {
       name: employeeDetail,
       page: () => EmployeeDetailScreen(),
       binding: EmployeeDetailScreenBinding(),
+    ),
+    GetPage(
+      name: employeeAdd,
+      page: () => EmployeeAddScreen(),
+      binding: EmployeeAddScreenBinding(),
     ),
     GetPage(
       name: employeeEdit,
