@@ -1,16 +1,15 @@
-import 'package:employee_management/routes/app_pages.dart';
 import 'package:employee_management/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class EmployeeOutsourceListsScreen extends StatelessWidget {
+  const EmployeeOutsourceListsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppConstants.appName),
+        title: const Text('พนักงาน Outsource'),
         backgroundColor: Color(AppConstants.primaryColorValue),
         foregroundColor: Colors.white,
       ),
@@ -21,7 +20,7 @@ class HomeScreen extends StatelessWidget {
             'พนักงานในบริษัท',
             MediaQuery.sizeOf(context).width * 0.8,
             () {
-              Get.toNamed(Routes.employeeLists);
+              //Get.toNamed(Route.employeeList);
             },
           ),
           menuItem(

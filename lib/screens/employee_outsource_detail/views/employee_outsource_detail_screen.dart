@@ -1,10 +1,9 @@
-import 'package:employee_management/routes/app_pages.dart';
 import 'package:employee_management/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class EmployeeOutsourceDetailScreen extends StatelessWidget {
+  const EmployeeOutsourceDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class HomeScreen extends StatelessWidget {
             'พนักงานในบริษัท',
             MediaQuery.sizeOf(context).width * 0.8,
             () {
-              Get.toNamed(Routes.employeeLists);
+              //Get.toNamed(Route.employeeList);
             },
           ),
           menuItem(

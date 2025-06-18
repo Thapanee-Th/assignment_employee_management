@@ -18,10 +18,6 @@ class EmployeeListView extends StatelessWidget {
         foregroundColor: Colors.white,
         elevation: 2,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => _showSearchDialog(context),
-          ),
           PopupMenuButton<String>(
             onSelected: (value) => _handleMenuSelection(value),
             itemBuilder:
@@ -224,7 +220,7 @@ class EmployeeListView extends StatelessWidget {
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [const SizedBox(height: 4), Text(employee.position)],
+          children: [const SizedBox(height: 4), Text(employee.position ?? '')],
         ),
         trailing: PopupMenuButton<String>(
           onSelected: (value) => null,
@@ -277,37 +273,6 @@ class EmployeeListView extends StatelessWidget {
       info += 'Department: ${viewModel.selectedDepartment.value}';
     }
     return info;
-  }
-
-  void _showSearchDialog(BuildContext context) {
-    final TextEditingController searchController = TextEditingController();
-
-    Get.dialog(
-      AlertDialog(
-        title: const Text('Search Employees'),
-        content: TextField(
-          controller: searchController,
-          decoration: const InputDecoration(
-            hintText: 'Enter name, email, position, or department',
-            border: OutlineInputBorder(),
-          ),
-          onSubmitted: (value) {
-            viewModel.searchEmployees(value);
-            Get.back();
-          },
-        ),
-        actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-          ElevatedButton(
-            onPressed: () {
-              viewModel.searchEmployees(searchController.text);
-              Get.back();
-            },
-            child: const Text('Search'),
-          ),
-        ],
-      ),
-    );
   }
 
   void _handleMenuSelection(String value) {

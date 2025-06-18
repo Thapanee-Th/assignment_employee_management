@@ -3,7 +3,6 @@ import 'package:employee_management/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'utils/constants.dart';
-import 'screens/home/views/employee_list_view.dart';
 
 void main() {
   runApp(const MyApp());

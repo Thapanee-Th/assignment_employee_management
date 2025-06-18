@@ -2,7 +2,7 @@ import 'package:employee_management/services/employee_service.dart';
 import 'package:get/get.dart';
 import '../../../models/employee.dart';
 
-class HomeScreenViewModel extends GetxController {
+class EmployeeOutsourceListsScreenViewModel extends GetxController {
   final EmployeeService _employeeService = EmployeeService();
 
   // Observable variables

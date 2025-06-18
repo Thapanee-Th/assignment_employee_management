@@ -1,20 +1,23 @@
 import 'dart:convert';
-import 'package:employee_management/services/json_asset_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/employee.dart';
 
-class EmployeeService {
-  final JsonAssetsService _jsonService = JsonAssetsService();
+class EmployeeOutsouceService {
   static const String _storageKey = 'employees';
 
   // Get all employees
   Future<List<Employee>> getAllEmployees() async {
     try {
-      return await _jsonService.loadJsonModelList<Employee>(
-        'assets/data/employees.json',
-        (json) => Employee.fromJson(json),
-      );
+      final prefs = await SharedPreferences.getInstance();
+      final String? employeesJson = prefs.getString(_storageKey);
+
+      if (employeesJson == null || employeesJson.isEmpty) {
+        return [];
+      }
+
+      final List<dynamic> employeesList = json.decode(employeesJson);
+      return employeesList.map((json) => Employee.fromJson(json)).toList();
     } catch (e) {
       debugPrint('Error getting employees: $e');
       return [];

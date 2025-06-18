@@ -2,11 +2,12 @@ import 'package:employee_management/services/employee_service.dart';
 import 'package:get/get.dart';
 import '../../../models/employee.dart';
 
-class HomeScreenViewModel extends GetxController {
+class EmployeeListsScreenViewModel extends GetxController {
   final EmployeeService _employeeService = EmployeeService();
 
   // Observable variables
   final RxList<Employee> employees = <Employee>[].obs;
+  final RxList<Employee> filteredEmployees = <Employee>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxString searchQuery = ''.obs;
@@ -27,6 +28,7 @@ class HomeScreenViewModel extends GetxController {
       final List<Employee> employeeList =
           await _employeeService.getAllEmployees();
       employees.assignAll(employeeList);
+      filteredEmployees.assignAll(employeeList);
     } catch (e) {
       errorMessage.value = 'Failed to load employees: $e';
     } finally {

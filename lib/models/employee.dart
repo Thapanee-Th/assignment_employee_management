@@ -1,15 +1,15 @@
 class Employee {
   final String id;
   final String name;
-  final String email;
-  final String position;
+  final String? email;
+  final String? position;
   final String? phone;
 
   Employee({
     required this.id,
     required this.name,
-    required this.email,
-    required this.position,
+    this.email,
+    this.position,
     this.phone,
   });
 
