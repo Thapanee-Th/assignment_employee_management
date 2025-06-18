@@ -1,9 +1,9 @@
 class Employee {
-  final String id;
-  final String name;
-  final String? email;
-  final String? position;
-  final String? phone;
+  String id;
+  String name;
+  String? email;
+  String? position;
+  String? phone;
 
   Employee({
     required this.id,

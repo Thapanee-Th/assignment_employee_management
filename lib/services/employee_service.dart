@@ -11,10 +11,34 @@ class EmployeeService {
   // Get all employees
   Future<List<Employee>> getAllEmployees() async {
     try {
-      return await _jsonService.loadJsonModelList<Employee>(
-        'assets/data/employees.json',
-        (json) => Employee.fromJson(json),
-      );
+      final prefs = await SharedPreferences.getInstance();
+      String? employeesJson = prefs.getString(_storageKey);
+      List<Employee> employees = [];
+      debugPrint('employeesJson: $employeesJson');
+
+      if (employeesJson == null ||
+          employeesJson.isEmpty ||
+          employeesJson == '[]') {
+        employees = await _jsonService.loadJsonModelList<Employee>(
+          'assets/data/employees.json',
+          (json) => Employee.fromJson(json),
+        );
+
+        // 1. Convert List<Employee> to List<Map<String, dynamic>>
+        List<Map<String, dynamic>> employeeMaps =
+            employees.map((employee) => employee.toJson()).toList();
+        // 2. Encode the List<Map<String, dynamic>> to a JSON string
+        employeesJson = jsonEncode(employeeMaps);
+        // 3. Save the JSON string to SharedPreferences
+        await prefs.setString(_storageKey, employeesJson);
+      } else {
+        List<dynamic> employeeMaps = jsonDecode(employeesJson);
+
+        //  Convert the List<dynamic> (of maps) to a List<Employee>
+        employees = employeeMaps.map((map) => Employee.fromJson(map)).toList();
+      }
+
+      return employees;
     } catch (e) {
       debugPrint('Error getting employees: $e');
       return [];
@@ -84,7 +108,8 @@ class EmployeeService {
   Future<Employee?> getEmployeeById(String employeeId) async {
     try {
       final List<Employee> employees = await getAllEmployees();
-      return employees.firstWhere((emp) => emp.id == employeeId);
+      var emp = employees.firstWhere((emp) => emp.id == employeeId);
+      return emp;
     } catch (e) {
       debugPrint('Error getting employee by ID: $e');
       return null;

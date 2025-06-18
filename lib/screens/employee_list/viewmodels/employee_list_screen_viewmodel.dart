@@ -1,3 +1,4 @@
+import 'package:employee_management/routes/app_pages.dart';
 import 'package:employee_management/services/employee_service.dart';
 import 'package:get/get.dart';
 import '../../../models/employee.dart';
@@ -134,6 +135,17 @@ class EmployeeListsScreenViewModel extends GetxController {
     searchQuery.value = '';
     selectedDepartment.value = '';
     loadEmployees();
+  }
+
+  getDetail(employee) async {
+    final result = await Get.toNamed(
+      Routes.employeeDetail,
+      arguments: employee,
+    );
+
+    if (result != null && result is Map && result['success'] == true) {
+      loadEmployees();
+    }
   }
 
   // Get filtered employees count

@@ -30,12 +30,7 @@ class EmployeeListsScreen extends StatelessWidget {
             : EmployeeListView(
               employees: viewModel.filteredEmployees,
               onEmployeeTap: (employee) {
-                Get.toNamed(
-                  Routes.employeeDetail,
-                  arguments: {'employee': employee.toJson()},
-                );
-                // Navigate to employee details
-                //print('Tapped: ${employee.name}');
+                viewModel.getDetail(employee);
               },
               onEmployeeEdit: (employee) {
                 // Edit employee

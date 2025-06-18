@@ -21,22 +21,12 @@ class EmployeeDetailScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () => _editEmployee(context),
+            onPressed: () => viewModel.editEmployee(),
           ),
           PopupMenuButton<String>(
             onSelected: (value) => _handleMenuAction(context, value),
             itemBuilder:
                 (context) => [
-                  const PopupMenuItem(
-                    value: 'share',
-                    child: Row(
-                      children: [
-                        Icon(Icons.share, size: 18),
-                        SizedBox(width: 8),
-                        Text('Share'),
-                      ],
-                    ),
-                  ),
                   const PopupMenuItem(
                     value: 'delete',
                     child: Row(
@@ -78,7 +68,7 @@ class EmployeeDetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withAlpha(10),
             spreadRadius: 2,
             blurRadius: 8,
             offset: const Offset(0, 2),
@@ -94,18 +84,10 @@ class EmployeeDetailScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: _getAvatarColor(),
               borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: _getAvatarColor().withOpacity(0.3),
-                  spreadRadius: 3,
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
             ),
             child: Center(
               child: Text(
-                viewModel.employee.value.name ?? '',
+                viewModel.employee.value.name,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -117,7 +99,7 @@ class EmployeeDetailScreen extends StatelessWidget {
           const SizedBox(height: 16),
           // Name
           Text(
-            viewModel.employee.value.name ?? '',
+            viewModel.employee.value.name,
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -219,7 +201,7 @@ class EmployeeDetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withAlpha(10),
             spreadRadius: 2,
             blurRadius: 8,
             offset: const Offset(0, 2),
@@ -244,9 +226,9 @@ class EmployeeDetailScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _buildInfoRow('Employee ID', viewModel.employee.value.id ?? ''),
+          _buildInfoRow('Employee ID', viewModel.employee.value.id),
           const SizedBox(height: 12),
-          _buildInfoRow('Full Name', viewModel.employee.value.name ?? ''),
+          _buildInfoRow('Full Name', viewModel.employee.value.name),
           const SizedBox(height: 12),
           _buildInfoRow('Position', viewModel.employee.value.position ?? ''),
           const SizedBox(height: 12),
@@ -355,23 +337,13 @@ class EmployeeDetailScreen extends StatelessWidget {
     return colors[viewModel.employee.value.id.hashCode % colors.length];
   }
 
-  void _editEmployee(BuildContext context) {
-    // Navigate to edit page
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => EmployeeEditPage(employee: employee),
-    //   ),
-    // );
-  }
-
   void _handleMenuAction(BuildContext context, String action) {
     switch (action) {
       case 'share':
         _shareEmployee(context);
         break;
       case 'delete':
-        _deleteEmployee(context);
+        viewModel.deleteEmployee(context);
         break;
     }
   }
@@ -414,42 +386,14 @@ Phone: ${viewModel.employee.value.phone}
     );
   }
 
-  void _deleteEmployee(BuildContext context) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Delete Employee'),
-            content: Text(
-              'Are you sure you want to delete ${viewModel.employee.value.name}?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close dialog
-                  Navigator.pop(context); // Go back to previous screen
-                  // Handle delete logic here
-                },
-                style: TextButton.styleFrom(foregroundColor: Colors.red),
-                child: const Text('Delete'),
-              ),
-            ],
-          ),
-    );
-  }
-
   void _launchEmail(String email) {
     // Implement email launching
-    print('Launch email to: $email');
+    debugPrint('Launch email to: $email');
   }
 
   void _launchPhone(String phone) {
     // Implement phone calling
-    print('Call phone: $phone');
+    debugPrint('Call phone: $phone');
   }
 
   void _copyToClipboard(String text) {
