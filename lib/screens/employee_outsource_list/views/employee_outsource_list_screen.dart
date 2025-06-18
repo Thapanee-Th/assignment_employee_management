@@ -16,13 +16,16 @@ class EmployeeOutsourceListsScreen extends StatelessWidget {
         title: const Text('พนักงาน Outsource'),
         backgroundColor: Color(AppConstants.primaryColorValue),
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              viewModel.onAddEmployee();
+            },
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          viewModel.onAddEmployee();
-        },
-      ),
+
       body: Obx(() {
         return viewModel.isLoading.value
             ? const Center(child: CircularProgressIndicator())
