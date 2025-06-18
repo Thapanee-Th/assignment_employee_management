@@ -1,56 +1,93 @@
-import 'package:employee_management/screens/employee_outsource_detail/viewmodels/employee_outsource_detail_screen_viewmodel.dart';
+import 'package:employee_management/screens/employee_outsource_edit/viewmodels/employee_outsource_edit_screen_viewmodel.dart';
+import 'package:employee_management/widgets/text_form_field_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class EmployeeOutsourceDetailScreen extends StatelessWidget {
-  EmployeeOutsourceDetailScreen({super.key});
-  final EmployeeOutsourceDetailScreenViewModel viewModel =
-      Get.find<EmployeeOutsourceDetailScreenViewModel>();
+class EmployeeOutsourceEditScreen extends StatelessWidget {
+  EmployeeOutsourceEditScreen({super.key});
+  final EmployeeOutsourceEditScreenViewModel viewModel =
+      Get.find<EmployeeOutsourceEditScreenViewModel>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        title: const Text('Employee Details'),
-        backgroundColor: Colors.blue.shade700,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () => viewModel.editEmployee(),
-          ),
-          PopupMenuButton<String>(
-            onSelected: (value) => _handleMenuAction(context, value),
-            itemBuilder:
-                (context) => [
-                  const PopupMenuItem(
-                    value: 'delete',
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete, size: 18, color: Colors.red),
-                        SizedBox(width: 8),
-                        Text('Delete', style: TextStyle(color: Colors.red)),
-                      ],
-                    ),
-                  ),
-                ],
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text('Edit Employee')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Obx(
-          () => Column(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: viewModel.editFormKey,
+          child: Column(
             children: [
-              _buildProfileHeader(),
-              const SizedBox(height: 20),
-              _buildContactInfo(),
-              const SizedBox(height: 20),
-              _buildEmployeeInfo(),
-              const SizedBox(height: 20),
+              TextFormFieldWidget(
+                controller: viewModel.nameController,
+                label: 'Name',
+                //  decoration: const InputDecoration(labelText: 'Name'),
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.companyController,
+                label: 'Company',
+                //  decoration: const InputDecoration(labelText: 'Name'),
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.usernameController,
+                label: 'Username',
+                //  decoration: const InputDecoration(labelText: 'Name'),
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.emailController,
+                label: 'Email',
+                // decoration: const InputDecoration(labelText: 'Email'),
+                validator: viewModel.validator,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.addressController,
+                label: 'Address',
+                //  decoration: const InputDecoration(labelText: 'Name'),
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.zipController,
+                label: 'Zip Code',
+                //  decoration: const InputDecoration(labelText: 'Name'),
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.stateController,
+                label: 'State',
+                //  decoration: const InputDecoration(labelText: 'Name'),
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.countryController,
+                label: 'Country',
+                //  decoration: const InputDecoration(labelText: 'Name'),
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormFieldWidget(
+                controller: viewModel.phoneController,
+                // decoration: const InputDecoration(labelText: 'Phone'),
+                label: 'Phone',
+                validator: viewModel.validator,
+              ),
+              const SizedBox(height: 32.0),
+              ElevatedButton(
+                onPressed: viewModel.saveEmployee,
+                child: const Text('Save Changes'),
+              ),
             ],
           ),
         ),
@@ -67,7 +104,7 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withAlpha(10),
+            color: Colors.grey.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 8,
             offset: const Offset(0, 2),
@@ -83,10 +120,18 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: _getAvatarColor(),
               borderRadius: BorderRadius.circular(50),
+              boxShadow: [
+                BoxShadow(
+                  color: _getAvatarColor().withAlpha(30),
+                  spreadRadius: 3,
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
             child: Center(
               child: Text(
-                viewModel.employee.value!.name,
+                viewModel.employee.value?.name ?? '',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -98,7 +143,7 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
           const SizedBox(height: 16),
           // Name
           Text(
-            viewModel.employee.value!.username,
+            viewModel.employee.value?.name ?? '',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -116,7 +161,7 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
               border: Border.all(color: Colors.blue.shade200),
             ),
             child: Text(
-              viewModel.employee.value!.company,
+              viewModel.employee.value?.position ?? '',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -127,7 +172,7 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
           const SizedBox(height: 12),
           // Employee ID
           Text(
-            'ID: ${viewModel.employee.value!.id}',
+            'ID: ${viewModel.employee.value?.id}',
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey.shade600,
@@ -176,15 +221,15 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
           _buildContactItem(
             icon: Icons.email,
             label: 'Email',
-            value: viewModel.employee.value!.email ?? '',
-            onTap: () => _launchEmail(viewModel.employee.value!.email ?? ''),
+            value: viewModel.employee.value?.email ?? '',
+            onTap: () => _launchEmail(viewModel.employee.value?.email ?? ''),
           ),
           const SizedBox(height: 12),
           _buildContactItem(
             icon: Icons.phone,
             label: 'Phone',
-            value: viewModel.employee.value!.phone ?? '',
-            onTap: () => _launchPhone(viewModel.employee.value!.phone ?? ''),
+            value: viewModel.employee.value?.phone ?? '',
+            onTap: () => _launchPhone(viewModel.employee.value?.phone ?? ''),
           ),
         ],
       ),
@@ -200,7 +245,7 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withAlpha(10),
+            color: Colors.grey.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 8,
             offset: const Offset(0, 2),
@@ -225,19 +270,11 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _buildInfoRow('Employee ID', viewModel.employee.value!.id),
+          _buildInfoRow('Employee ID', viewModel.employee.value?.id ?? ''),
           const SizedBox(height: 12),
-          _buildInfoRow('Full Name', viewModel.employee.value!.name),
+          _buildInfoRow('Full Name', viewModel.employee.value?.name ?? ''),
           const SizedBox(height: 12),
-          _buildInfoRow('Company', viewModel.employee.value!.company),
-          const SizedBox(height: 12),
-          _buildInfoRow('Address', viewModel.employee.value!.address),
-          const SizedBox(height: 12),
-          _buildInfoRow('State', viewModel.employee.value!.state),
-          const SizedBox(height: 12),
-          _buildInfoRow('Country', viewModel.employee.value!.country),
-          const SizedBox(height: 12),
-          _buildInfoRow('Zip Code', viewModel.employee.value!.zip),
+          _buildInfoRow('Position', viewModel.employee.value?.position ?? ''),
           const SizedBox(height: 12),
           _buildInfoRow('Status', 'Active', valueColor: Colors.green),
         ],
@@ -350,7 +387,7 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
         _shareEmployee(context);
         break;
       case 'delete':
-        viewModel.deleteEmployee(context);
+        _deleteEmployee(context);
         break;
     }
   }
@@ -358,10 +395,11 @@ class EmployeeOutsourceDetailScreen extends StatelessWidget {
   void _shareEmployee(BuildContext context) {
     final shareText = '''
 Employee Details:
-Name: ${viewModel.employee.value!.name}
-Position: ${viewModel.employee.value!.position}
-Email: ${viewModel.employee.value!.email}
-Phone: ${viewModel.employee.value!.phone}
+Name: ${viewModel.employee.value?.name}
+Position: ${viewModel.employee.value?.position}
+Email: ${viewModel.employee.value?.email}
+Phone: ${viewModel.employee.value?.phone}
+
 ''';
 
     // Show share dialog
@@ -393,14 +431,42 @@ Phone: ${viewModel.employee.value!.phone}
     );
   }
 
+  void _deleteEmployee(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Delete Employee'),
+            content: Text(
+              'Are you sure you want to delete ${viewModel.employee.value?.name}?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close dialog
+                  Navigator.pop(context); // Go back to previous screen
+                  // Handle delete logic here
+                },
+                style: TextButton.styleFrom(foregroundColor: Colors.red),
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+    );
+  }
+
   void _launchEmail(String email) {
     // Implement email launching
-    debugPrint('Launch email to: $email');
+    print('Launch email to: $email');
   }
 
   void _launchPhone(String phone) {
     // Implement phone calling
-    debugPrint('Call phone: $phone');
+    print('Call phone: $phone');
   }
 
   void _copyToClipboard(String text) {

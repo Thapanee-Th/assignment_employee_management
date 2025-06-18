@@ -1,19 +1,19 @@
 import 'package:employee_management/models/employee.dart';
 
 class EmployeeOutsource extends Employee {
-  final String company;
-  final String username;
-  final String address;
-  final String zip;
-  final String state;
-  final String country;
-  final String? photo;
+  String company;
+  String username;
+  String address;
+  String zip;
+  String state;
+  String country;
+  String? photo;
 
   EmployeeOutsource({
     required super.id,
     required super.name,
     required super.email,
-    required super.position,
+    super.position,
     required super.phone,
     required this.address,
     String? addressEmployee,

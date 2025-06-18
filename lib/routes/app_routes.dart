@@ -9,4 +9,5 @@ abstract class Routes {
   static const employeeEdit = '/employee-edit';
   static const employeeOutsourceLists = '/employee-outsource-lists';
   static const employeeOutsourceDetail = '/employee-outsource-detail';
+  static const employeeOutsourceEdit = '/employee-outsource-edit';
 }

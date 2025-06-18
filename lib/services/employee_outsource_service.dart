@@ -100,7 +100,7 @@ class EmployeeOutsourceService {
   // Delete employee
   Future<bool> deleteEmployee(String employeeId) async {
     try {
-      final List<Employee> employees = await getAllEmployees();
+      final List<EmployeeOutsource> employees = await getAllEmployees();
       employees.removeWhere((emp) => emp.id == employeeId);
 
       final prefs = await SharedPreferences.getInstance();
@@ -116,9 +116,9 @@ class EmployeeOutsourceService {
   }
 
   // Get employee by ID
-  Future<Employee?> getEmployeeById(String employeeId) async {
+  Future<EmployeeOutsource?> getEmployeeById(String employeeId) async {
     try {
-      final List<Employee> employees = await getAllEmployees();
+      final List<EmployeeOutsource> employees = await getAllEmployees();
       return employees.firstWhere((emp) => emp.id == employeeId);
     } catch (e) {
       debugPrint('Error getting employee by ID: $e');

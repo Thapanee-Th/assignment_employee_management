@@ -8,6 +8,8 @@ import 'package:employee_management/screens/employee_list/employee_list_screen_b
 import 'package:employee_management/screens/employee_list/views/employee_list_screen.dart';
 import 'package:employee_management/screens/employee_outsource_detail/employee_outsource_detail_screen_binding.dart';
 import 'package:employee_management/screens/employee_outsource_detail/views/employee_outsource_detail_screen.dart';
+import 'package:employee_management/screens/employee_outsource_edit/employee_outsource_edit_screen_binding.dart';
+import 'package:employee_management/screens/employee_outsource_edit/views/employee_outsource_edit_screen.dart';
 import 'package:employee_management/screens/employee_outsource_list/employee_outsource_list_screen_binding.dart';
 import 'package:employee_management/screens/employee_outsource_list/views/employee_outsource_list_screen.dart';
 import 'package:employee_management/screens/home/home_screen_binding.dart';
@@ -24,6 +26,7 @@ class AppPages {
   static const employeeOutsourceDetail = Routes.employeeOutsourceDetail;
   static const employeeEdit = Routes.employeeEdit;
   static const employeeAdd = Routes.employeeAdd;
+  static const employeeOutsourceEdit = Routes.employeeOutsourceEdit;
 
   static final routes = [
     GetPage(name: home, page: () => HomeScreen(), binding: HomeScreenBinding()),
@@ -56,6 +59,11 @@ class AppPages {
       name: employeeOutsourceDetail,
       page: () => EmployeeOutsourceDetailScreen(),
       binding: EmployeeOutsourceDetailScreenBinding(),
+    ),
+    GetPage(
+      name: employeeOutsourceEdit,
+      page: () => EmployeeOutsourceEditScreen(),
+      binding: EmployeeOutsourceEditScreenBinding(),
     ),
   ];
 }

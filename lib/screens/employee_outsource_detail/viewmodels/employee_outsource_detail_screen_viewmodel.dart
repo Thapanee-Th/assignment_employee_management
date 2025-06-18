@@ -32,7 +32,7 @@ class EmployeeOutsourceDetailScreenViewModel extends GetxController {
 
   void editEmployee() async {
     final result = await Get.toNamed(
-      Routes.employeeEdit,
+      Routes.employeeOutsourceEdit,
       arguments: employee.value,
     );
     if (result != null && result is Map && result['success'] == true) {
@@ -42,8 +42,15 @@ class EmployeeOutsourceDetailScreenViewModel extends GetxController {
       debugPrint('Fetched employee for update: ${emp!.toJson()}');
       employee.value!.name = emp.name;
       employee.value!.email = emp.email;
-      employee.value!.position = emp.position;
       employee.value!.phone = emp.phone;
+      employee.value!.company = emp.company;
+      employee.value!.address = emp.address;
+      employee.value!.state = emp.state;
+      employee.value!.country = emp.country;
+      employee.value!.zip = emp.zip;
+      employee.value!.username = emp.username;
+      employee.value!.id = emp.id;
+
       employee.refresh();
       debugPrint(
         'Fetched employee.value for update: ${employee.value!.toJson()}',
