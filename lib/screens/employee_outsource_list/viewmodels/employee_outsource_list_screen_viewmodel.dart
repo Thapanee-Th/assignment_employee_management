@@ -67,7 +67,7 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
   }
 
   onAddEmployee() async {
-    final result = await Get.toNamed(Routes.employeeAdd);
+    final result = await Get.toNamed(Routes.employeeOutsourceAdd);
     if (result != null && result is Map && result['success'] == true) {
       loadEmployees();
       Get.snackbar(

@@ -57,9 +57,9 @@ class EmployeeOutsourceService {
   }
 
   // Add new employee
-  Future<bool> addEmployee(Employee employee) async {
+  Future<bool> addEmployee(EmployeeOutsource employee) async {
     try {
-      final List<Employee> employees = await getAllEmployees();
+      final List<EmployeeOutsource> employees = await getAllEmployees();
       employees.add(employee);
 
       final prefs = await SharedPreferences.getInstance();
@@ -75,9 +75,9 @@ class EmployeeOutsourceService {
   }
 
   // Update employee
-  Future<bool> updateEmployee(Employee employee) async {
+  Future<bool> updateEmployee(EmployeeOutsource employee) async {
     try {
-      final List<Employee> employees = await getAllEmployees();
+      final List<EmployeeOutsource> employees = await getAllEmployees();
       final int index = employees.indexWhere((emp) => emp.id == employee.id);
 
       if (index != -1) {

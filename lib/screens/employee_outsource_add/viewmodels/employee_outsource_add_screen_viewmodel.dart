@@ -1,23 +1,28 @@
-import 'package:employee_management/services/employee_service.dart';
+import 'package:employee_management/models/employee_outsource.dart';
+import 'package:employee_management/services/employee_outsource_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../models/employee.dart';
 import 'package:uuid/uuid.dart';
 
-class EmployeeAddScreenViewModel extends GetxController {
-  final EmployeeService _employeeService = EmployeeService();
+class EmployeeOutsourceAddScreenViewModel extends GetxController {
+  final EmployeeOutsourceService _employeeService = EmployeeOutsourceService();
 
   final GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
 
   // Use RxString for reactive updates, or simply TextEditingController
   // For pre-filling, TextEditingController is often more straightforward.
   late TextEditingController nameController = TextEditingController();
+  late TextEditingController companyController = TextEditingController();
+  late TextEditingController usernameController = TextEditingController();
   late TextEditingController emailController = TextEditingController();
-  late TextEditingController positionController = TextEditingController();
+  late TextEditingController addressController = TextEditingController();
+  late TextEditingController zipController = TextEditingController();
+  late TextEditingController stateController = TextEditingController();
+  late TextEditingController countryController = TextEditingController();
   late TextEditingController phoneController = TextEditingController();
 
   // Rx variable to hold the employee being edited
-  var employee = Rx<Employee?>(null);
+  var employee = Rx<EmployeeOutsource?>(null);
   final Uuid _uuid = Uuid();
 
   String? validator(String? value) {
@@ -29,12 +34,17 @@ class EmployeeAddScreenViewModel extends GetxController {
 
   void saveEmployee() async {
     if (editFormKey.currentState!.validate()) {
-      final emp = Employee(
+      final emp = EmployeeOutsource(
         id: _uuid.v4(),
         name: nameController.text,
         email: emailController.text,
-        position: positionController.text,
         phone: phoneController.text,
+        company: companyController.text,
+        address: addressController.text,
+        state: stateController.text,
+        country: countryController.text,
+        zip: zipController.text,
+        username: usernameController.text,
       );
       if (await _employeeService.addEmployee(emp)) {
         Get.back(result: {'success': true, 'employeeName': emp.name});
