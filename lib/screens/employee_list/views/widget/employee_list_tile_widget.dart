@@ -95,46 +95,6 @@ class EmployeeListTile extends StatelessWidget {
     );
   }
 
-  // Widget _buildAvatar() {
-  //   return Container(
-  //     width: 50,
-  //     height: 50,
-  //     decoration: BoxDecoration(
-  //       color: _getAvatarColor(),
-  //       borderRadius: BorderRadius.circular(25),
-  //       // border: Border.all(
-  //       //   color: employee.isActive ? Colors.green : Colors.grey,
-  //       //   width: 2,
-  //       // ),
-  //     ),
-  //     child:
-  //         employee.profileImage.isNotEmpty
-  //             ? ClipRRect(
-  //               borderRadius: BorderRadius.circular(23),
-  //               child: Image.network(
-  //                 employee.profileImage,
-  //                 fit: BoxFit.cover,
-  //                 errorBuilder:
-  //                     (context, error, stackTrace) => _buildInitialsAvatar(),
-  //               ),
-  //             )
-  //             : _buildInitialsAvatar(),
-  //   );
-  // }
-
-  Widget _buildInitialsAvatar() {
-    return Center(
-      child: Text(
-        employee.name,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
-    );
-  }
-
   Widget _buildTitle() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

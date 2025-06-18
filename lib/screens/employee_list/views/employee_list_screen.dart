@@ -27,29 +27,15 @@ class EmployeeListsScreen extends StatelessWidget {
         return viewModel.isLoading.value
             ? const Center(child: CircularProgressIndicator())
             : EmployeeListView(
-              employees: viewModel.filteredEmployees,
+              employees: viewModel.employees,
               onEmployeeTap: (employee) {
                 viewModel.getDetail(employee);
               },
               onEmployeeEdit: (employee) {
-                // Edit employee
-                //rint('Edit: ${employee.name}');
+                viewModel.editEmployee(employee);
               },
               onEmployeeDelete: (employee) {
-                // setState(() {
-                //   employees.removeWhere((e) => e.id == employee.id);
-                // });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${employee.name} deleted'),
-                    action: SnackBarAction(
-                      label: 'Undo',
-                      onPressed: () {
-                        // Implement undo functionality
-                      },
-                    ),
-                  ),
-                );
+                viewModel.deleteEmployee(employee.id);
               },
             );
       }),

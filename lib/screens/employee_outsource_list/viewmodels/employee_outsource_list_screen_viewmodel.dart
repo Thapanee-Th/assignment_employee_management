@@ -10,7 +10,6 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
 
   // Observable variables
   final RxList<EmployeeOutsource> employees = <EmployeeOutsource>[].obs;
-  final RxList<EmployeeOutsource> filteredEmployees = <EmployeeOutsource>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxString searchQuery = ''.obs;
@@ -31,7 +30,6 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
       final List<EmployeeOutsource> employeeList =
           await _employeeService.getAllEmployees();
       employees.assignAll(employeeList);
-      filteredEmployees.assignAll(employeeList);
     } catch (e) {
       errorMessage.value = 'Failed to load employees: $e';
     } finally {
@@ -117,6 +115,7 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
       final bool success = await _employeeService.deleteEmployee(employeeId);
       if (success) {
         employees.removeWhere((emp) => emp.id == employeeId);
+
         Get.snackbar(
           'Success',
           'Employee deleted successfully',

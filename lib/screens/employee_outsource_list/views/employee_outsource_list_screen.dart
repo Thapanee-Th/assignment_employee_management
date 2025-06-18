@@ -1,4 +1,3 @@
-import 'package:employee_management/screens/employee_list/views/widget/employee_list_tile_widget.dart';
 import 'package:employee_management/screens/employee_outsource_list/viewmodels/employee_outsource_list_screen_viewmodel.dart';
 import 'package:employee_management/screens/employee_outsource_list/views/widget/employee_outsource_list_tile_widget.dart';
 import 'package:employee_management/utils/constants.dart';
@@ -28,7 +27,7 @@ class EmployeeOutsourceListsScreen extends StatelessWidget {
         return viewModel.isLoading.value
             ? const Center(child: CircularProgressIndicator())
             : EmployeeOutsourceListView(
-              employees: viewModel.filteredEmployees,
+              employees: viewModel.employees,
               onEmployeeTap: (employee) {
                 viewModel.getDetail(employee);
               },
@@ -37,20 +36,7 @@ class EmployeeOutsourceListsScreen extends StatelessWidget {
                 //rint('Edit: ${employee.name}');
               },
               onEmployeeDelete: (employee) {
-                // setState(() {
-                //   employees.removeWhere((e) => e.id == employee.id);
-                // });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${employee.name} deleted'),
-                    action: SnackBarAction(
-                      label: 'Undo',
-                      onPressed: () {
-                        // Implement undo functionality
-                      },
-                    ),
-                  ),
-                );
+                viewModel.deleteEmployee(employee.id);
               },
             );
       }),

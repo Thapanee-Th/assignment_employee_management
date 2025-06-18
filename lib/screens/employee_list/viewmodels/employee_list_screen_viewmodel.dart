@@ -1,5 +1,6 @@
 import 'package:employee_management/routes/app_pages.dart';
 import 'package:employee_management/services/employee_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/employee.dart';
 
@@ -8,7 +9,7 @@ class EmployeeListsScreenViewModel extends GetxController {
 
   // Observable variables
   final RxList<Employee> employees = <Employee>[].obs;
-  final RxList<Employee> filteredEmployees = <Employee>[].obs;
+
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxString searchQuery = ''.obs;
@@ -29,7 +30,6 @@ class EmployeeListsScreenViewModel extends GetxController {
       final List<Employee> employeeList =
           await _employeeService.getAllEmployees();
       employees.assignAll(employeeList);
-      filteredEmployees.assignAll(employeeList);
     } catch (e) {
       errorMessage.value = 'Failed to load employees: $e';
     } finally {
@@ -76,33 +76,29 @@ class EmployeeListsScreenViewModel extends GetxController {
     }
   }
 
-  // Update employee
-  Future<bool> updateEmployee(Employee employee) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
+  void editEmployee(employee) async {
+    final result = await Get.toNamed(Routes.employeeEdit, arguments: employee);
+    if (result != null && result is Map && result['success'] == true) {
+      var emp = await _employeeService.getEmployeeById(employee.id) ?? employee;
 
-      final bool success = await _employeeService.updateEmployee(employee);
-      if (success) {
-        final int index = employees.indexWhere((emp) => emp.id == employee.id);
-        if (index != -1) {
-          employees[index] = employee;
-        }
-        Get.snackbar(
-          'Success',
-          'Employee updated successfully',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        return true;
-      } else {
-        errorMessage.value = 'Failed to update employee';
-        return false;
+      employee.name = emp.name;
+      employee.email = emp.email;
+      employee.position = emp.position;
+      employee.phone = emp.phone;
+
+      final int index = employees.indexWhere((emp) => emp.id == employee.id);
+      if (index != -1) {
+        employees[index] = employee;
       }
-    } catch (e) {
-      errorMessage.value = 'Error updating employee: $e';
-      return false;
-    } finally {
-      isLoading.value = false;
+      employees.refresh();
+
+      Get.snackbar(
+        'Success',
+        'Employee ${result['employeeName']} updated!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -115,6 +111,7 @@ class EmployeeListsScreenViewModel extends GetxController {
       final bool success = await _employeeService.deleteEmployee(employeeId);
       if (success) {
         employees.removeWhere((emp) => emp.id == employeeId);
+
         Get.snackbar(
           'Success',
           'Employee deleted successfully',

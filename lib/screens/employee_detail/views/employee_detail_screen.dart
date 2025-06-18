@@ -343,7 +343,7 @@ class EmployeeDetailScreen extends StatelessWidget {
         _shareEmployee(context);
         break;
       case 'delete':
-        viewModel.deleteEmployee(context);
+        viewModel.deleteEmployee();
         break;
     }
   }

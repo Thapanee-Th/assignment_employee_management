@@ -57,12 +57,11 @@ class EmployeeDetailScreenViewModel extends GetxController {
     }
   }
 
-  void deleteEmployee(BuildContext context) {
+  void deleteEmployee() {
     Get.dialog(
       Builder(
         // Provides a BuildContext within the dialog
         builder: (dialogContext) {
-          final theme = Theme.of(dialogContext);
           return AlertDialog(
             title: const Text('Delete Employee'),
             content: Text(
@@ -70,7 +69,7 @@ class EmployeeDetailScreenViewModel extends GetxController {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Get.back(),
                 child: const Text('Cancel'),
               ),
               TextButton(
@@ -94,30 +93,5 @@ class EmployeeDetailScreenViewModel extends GetxController {
         },
       ),
     );
-    // showDialog(
-    //   context: context,
-    //   builder:
-    //       (context) => AlertDialog(
-    //         title: const Text('Delete Employee'),
-    //         content: Text(
-    //           'Are you sure you want to delete ${employee.value.name}?',
-    //         ),
-    //         actions: [
-    //           TextButton(
-    //             onPressed: () => Navigator.pop(context),
-    //             child: const Text('Cancel'),
-    //           ),
-    //           TextButton(
-    //             onPressed: () {
-    //               Navigator.pop(context); // Close dialog
-    //               Navigator.pop(context); // Go back to previous screen
-    //               // Handle delete logic here
-    //             },
-    //             style: TextButton.styleFrom(foregroundColor: Colors.red),
-    //             child: const Text('Delete'),
-    //           ),
-    //         ],
-    //       ),
-    // );
   }
 }
