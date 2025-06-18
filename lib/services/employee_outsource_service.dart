@@ -1,23 +1,55 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:employee_management/models/employee_outsource.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/employee.dart';
 
 class EmployeeOutsouceService {
-  static const String _storageKey = 'employees';
+  static const String _apiEmployee =
+      'https://fake-json-api.mock.beeceptor.com/users';
+  final Dio _dio = Dio();
+
+  static const String _storageKey = 'employeesOutsource';
 
   // Get all employees
-  Future<List<Employee>> getAllEmployees() async {
+  Future<List<EmployeeOutsource>> getAllEmployees() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final String? employeesJson = prefs.getString(_storageKey);
+      String? employeesJson = prefs.getString(_storageKey);
+      List<EmployeeOutsource> employees = [];
+      debugPrint('employeesJson: $employeesJson');
 
-      if (employeesJson == null || employeesJson.isEmpty) {
-        return [];
+      if (employeesJson == null ||
+          employeesJson.isEmpty ||
+          employeesJson == '[]') {
+        final response = await _dio.get(_apiEmployee);
+
+        if (response.statusCode == 200) {
+          List<dynamic> data = response.data;
+          employees =
+              data.map((json) => EmployeeOutsource.fromJson(json)).toList();
+        } else {
+          throw Exception('Failed to load employees from API');
+        }
+
+        // 1. Convert List<Employee> to List<Map<String, dynamic>>
+        List<Map<String, dynamic>> employeeMaps =
+            employees.map((employee) => employee.toJson()).toList();
+        // 2. Encode the List<Map<String, dynamic>> to a JSON string
+        employeesJson = jsonEncode(employeeMaps);
+        // 3. Save the JSON string to SharedPreferences
+        await prefs.setString(_storageKey, employeesJson);
+      } else {
+        List<dynamic> employeeMaps = jsonDecode(employeesJson);
+
+        //  Convert the List<dynamic> (of maps) to a List<Employee>
+        employees =
+            employeeMaps.map((map) => EmployeeOutsource.fromJson(map)).toList();
       }
 
-      final List<dynamic> employeesList = json.decode(employeesJson);
-      return employeesList.map((json) => Employee.fromJson(json)).toList();
+      return employees;
     } catch (e) {
       debugPrint('Error getting employees: $e');
       return [];

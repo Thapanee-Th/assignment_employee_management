@@ -1,12 +1,16 @@
-import 'package:employee_management/services/employee_service.dart';
+import 'package:employee_management/models/employee_outsource.dart';
+import 'package:employee_management/routes/app_pages.dart';
+import 'package:employee_management/services/employee_outsource_service.dart';
+
 import 'package:get/get.dart';
 import '../../../models/employee.dart';
 
 class EmployeeOutsourceListsScreenViewModel extends GetxController {
-  final EmployeeService _employeeService = EmployeeService();
+  final EmployeeOutsouceService _employeeService = EmployeeOutsouceService();
 
   // Observable variables
-  final RxList<Employee> employees = <Employee>[].obs;
+  final RxList<EmployeeOutsource> employees = <EmployeeOutsource>[].obs;
+  final RxList<EmployeeOutsource> filteredEmployees = <EmployeeOutsource>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxString searchQuery = ''.obs;
@@ -24,9 +28,10 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
 
-      final List<Employee> employeeList =
+      final List<EmployeeOutsource> employeeList =
           await _employeeService.getAllEmployees();
       employees.assignAll(employeeList);
+      filteredEmployees.assignAll(employeeList);
     } catch (e) {
       errorMessage.value = 'Failed to load employees: $e';
     } finally {
@@ -35,7 +40,7 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
   }
 
   // Add new employee
-  Future<bool> addEmployee(Employee employee) async {
+  Future<bool> addEmployee(EmployeeOutsource employee) async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
@@ -61,8 +66,20 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
     }
   }
 
+  onAddEmployee() async {
+    final result = await Get.toNamed(Routes.employeeAdd);
+    if (result != null && result is Map && result['success'] == true) {
+      loadEmployees();
+      Get.snackbar(
+        'Success',
+        'Employee added successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
   // Update employee
-  Future<bool> updateEmployee(Employee employee) async {
+  Future<bool> updateEmployee(EmployeeOutsource employee) async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
@@ -132,6 +149,17 @@ class EmployeeOutsourceListsScreenViewModel extends GetxController {
     searchQuery.value = '';
     selectedDepartment.value = '';
     loadEmployees();
+  }
+
+  getDetail(employee) async {
+    final result = await Get.toNamed(
+      Routes.employeeDetail,
+      arguments: employee,
+    );
+
+    if (result != null && result is Map && result['success'] == true) {
+      loadEmployees();
+    }
   }
 
   // Get filtered employees count

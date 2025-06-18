@@ -14,7 +14,7 @@ class EmployeeOutsource extends Employee {
     required super.name,
     required super.email,
     required super.position,
-    required String phone,
+    required super.phone,
     required this.address,
     String? addressEmployee,
     required this.company,
@@ -27,11 +27,11 @@ class EmployeeOutsource extends Employee {
 
   factory EmployeeOutsource.fromJson(Map<String, dynamic> json) {
     return EmployeeOutsource(
-      id: json['id'] ?? '',
+      id: '${json['id'] ?? ''}',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       position: json['position'] ?? '',
-      phone: json['phone'],
+      phone: json['phone'] ?? '',
       addressEmployee: json['addressEmployee'],
       company: json['company'] ?? '',
       username: json['username'] ?? '',

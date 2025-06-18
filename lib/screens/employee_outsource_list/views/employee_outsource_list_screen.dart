@@ -1,9 +1,14 @@
+import 'package:employee_management/screens/employee_list/views/widget/employee_list_tile_widget.dart';
+import 'package:employee_management/screens/employee_outsource_list/viewmodels/employee_outsource_list_screen_viewmodel.dart';
+import 'package:employee_management/screens/employee_outsource_list/views/widget/employee_outsource_list_tile_widget.dart';
 import 'package:employee_management/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EmployeeOutsourceListsScreen extends StatelessWidget {
-  const EmployeeOutsourceListsScreen({super.key});
+  EmployeeOutsourceListsScreen({super.key});
+  final EmployeeOutsourceListsScreenViewModel viewModel =
+      Get.find<EmployeeOutsourceListsScreenViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -13,23 +18,42 @@ class EmployeeOutsourceListsScreen extends StatelessWidget {
         backgroundColor: Color(AppConstants.primaryColorValue),
         foregroundColor: Colors.white,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          menuItem(
-            'พนักงานในบริษัท',
-            MediaQuery.sizeOf(context).width * 0.8,
-            () {
-              //Get.toNamed(Route.employeeList);
-            },
-          ),
-          menuItem(
-            'พนักงาน Outsource',
-            MediaQuery.sizeOf(context).width * 0.8,
-            () {},
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          viewModel.onAddEmployee();
+        },
       ),
+      body: Obx(() {
+        return viewModel.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : EmployeeOutsourceListView(
+              employees: viewModel.filteredEmployees,
+              onEmployeeTap: (employee) {
+                viewModel.getDetail(employee);
+              },
+              onEmployeeEdit: (employee) {
+                // Edit employee
+                //rint('Edit: ${employee.name}');
+              },
+              onEmployeeDelete: (employee) {
+                // setState(() {
+                //   employees.removeWhere((e) => e.id == employee.id);
+                // });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${employee.name} deleted'),
+                    action: SnackBarAction(
+                      label: 'Undo',
+                      onPressed: () {
+                        // Implement undo functionality
+                      },
+                    ),
+                  ),
+                );
+              },
+            );
+      }),
     );
   }
 

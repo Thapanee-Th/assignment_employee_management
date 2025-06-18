@@ -27,7 +27,9 @@ class HomeScreen extends StatelessWidget {
           menuItem(
             'พนักงาน Outsource',
             MediaQuery.sizeOf(context).width * 0.8,
-            () {},
+            () {
+              Get.toNamed(Routes.employeeOutsourceLists);
+            },
           ),
         ],
       ),
